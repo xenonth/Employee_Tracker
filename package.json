@@ -1,0 +1,23 @@
+{
+  "name": "employee_tracker",
+  "version": "1.0.0",
+  "description": "CLI for business owners to efficiently run their business",
+  "main": "employee-tracker.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xenonth/Employee_Tracker.git"
+  },
+  "keywords": [
+    "Human",
+    "Resources"
+  ],
+  "author": "xenonth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xenonth/Employee_Tracker/issues"
+  },
+  "homepage": "https://github.com/xenonth/Employee_Tracker#readme"
+}
