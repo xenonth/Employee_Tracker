@@ -39,7 +39,7 @@ function start() {
     .then(function(answer) {
       // based on their answer, either call the bid or the post functions
       if (answer.access === "ADD") {
-        addEmployees();
+        addEmployeeToDepartment();
       }
       else if(answer.view === "VIEW") {
        viewEmployees();
@@ -55,15 +55,6 @@ function start() {
     });
 }
 
-
-
-
-
-// function to add data to the table 
-function addEmployees () {
-
-}
- 
 // function to view data in the table
 function viewEmployees() {
   // QUERY DATABASE for employee data
@@ -73,7 +64,7 @@ function viewEmployees() {
     console.log(view);
 
   //prompt of who to view
-  inquirer.prompt()
+
 
 
   })
@@ -81,5 +72,100 @@ function viewEmployees() {
 
 // function to update employee roles
 function updateEmployee () {
+      
+   // inquirer.prompt to add in all the updates
+
+  // log updates
+
+  // if possible log updates returned to the console
 
 }
+
+// database prompts
+
+// department table prompt
+
+// function to add data to the table 
+// addToDEpartment
+function addEmployeeToDepartment () {
+  inquirer
+  .prompt([
+    {
+      name: "department",
+      type: "input",
+      message: "Name of the Department?"
+    }])
+    .then((answer => {
+      connection.query("INSERT INTO department SET ?", {
+        name: answer.department
+        },        
+        function(err) {
+        if (err) throw err;
+        console.log("Your department was added successfully!");
+        addToRole();
+        }
+      )
+
+    }))
+}
+
+//addToEmployee
+function addToRole() {
+  inquirer.prompt([
+    {
+      name: "title",
+      type: "input",
+      message:"What is the job title of this employee?"
+  },
+  {
+    name: "salary",
+    type: "number",
+    message:"What is the salary of this employee (Please enter a numerical value)?"
+  }
+]).then((answers) => {
+  connection.query("INSERT INTO job_duty SET ?", 
+  {
+    title: answers.title,
+    salary: answers.salary
+  }, 
+  function(err) {
+    if (err) throw err;
+    console.log("Salary and Title added successfully!");
+    employeeName();
+  }
+  )
+
+})
+}
+
+function employeeName () {
+  inquirer.prompt([
+    {
+      name: "first",
+      type: "input",
+      message:"What is this employee's First Name?"
+    },
+    {
+      
+    name: "last",
+    type: "input",
+    message: "What is this employee's last name?"
+    },
+  ])
+  .then((answers) => {
+    connection.query("INSERT INTO employee SET ?", 
+    {
+      first_name: answers.first_name,
+      salary: answers.last_name
+    }, 
+    function(err) {
+      if (err) throw err;
+      start();
+    }
+    )
+    
+  })
+
+}
+
+
