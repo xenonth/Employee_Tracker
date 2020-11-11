@@ -1,3 +1,4 @@
+  
 //dependencies
 const inquirer = require("inquirer");
 const express = require("express")
@@ -69,17 +70,34 @@ function viewEmployees() {
 
   })
 }
-
+// will need to combine first_name and last_name of the employees to full name inside the query call, then figure out what to update
 // function to update employee roles
 function updateEmployee () {
-      
+  connection.query("SELECT * FROM employee", function(err, results) { 
+    if (err) throw err;
    // inquirer.prompt to add in all the updates
+    inquirer.prompt([{
+      name: "updateSelector",
+      type: "list",
+      message: "Please Select an Employee to update:",
+      choices: function() {
+        let choiceArray = [];
+        for (var i = 0; i < results.length; i++) {
+          choiceArray.push(results[i].first_name);
+        }
+        return choiceArray;
+      },
 
-  // log updates
+    }])
+  })
+    
+  
+   // log updates
 
   // if possible log updates returned to the console
 
 }
+
 
 // database prompts
 
@@ -167,5 +185,3 @@ function employeeName () {
   })
 
 }
-
-
