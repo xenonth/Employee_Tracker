@@ -7,6 +7,7 @@ const table = require("console.table")
 const mysql = require("mysql");
 
 
+
 var connection = mysql.createConnection({
   host: "localhost",
 
@@ -39,53 +40,106 @@ function start() {
     })
     .then(function(answer) {
       // based on their answer, either call the bid or the post functions
-      if (answer.access === "ADD") {
-        addEmployeeToDepartment();
-      }
-      else if(answer.access === "VIEW") {
-       viewEmployees();
+         
+      if (answer.access === "ADD") {insertData();}
+        
+      else if (answer.access === "VIEW") {dataView();}
+           
+      else if (answer.access === "UPDATE") {updateEmployee();}
       
-      } else if (answer.access === "UPDATE"){
-        updateEmployee();
-
-        
-        
-      } else if (answer.access === "DONE") {
-        connection.end();
-      }
+      else if (answer.access === "DONE")
+         {connection.end();}
+    
     });
 }
 
 // function to view data in the table
+dataView = () => {
+  inquirer.prompt([
+    {
+      name: "viewType",
+      type: "list",
+      message: "Which table would you like to view?",
+      choices: ["EMPLOYEES", "DEPARTMENTS", "ROLES", "EMPLOYEE-ROLES", "ROLE-DEPARTMENTS"]
+    },
+  ])
+  .then((answer) =>{
+    if (answer.viewType === "EMPLOYEES") 
+      {viewEmployees();}
+    else if (answer.viewType === "DEPARTMENTS") 
+        {viewDepartments();}
+           
+    else if (answer.viewType === "ROLES")
+        {viewRoles();}
+      
+    else if (answer.viewType ==="EMPLOYEE-ROLES")
+          {viewJoinEmployeeRoles();}
+        
+      
+    else if (answer.viewType === "ROLE-DEPARTMENTS") 
+        {viewJoinDepartments();}      
+  })
+}
 
+
+// Table View functions
 function viewEmployees() {
   // QUERY DATABASE for employee data
+  connection.query("SELECT * FROM employee", function(err, results) {
+    if (err) throw err;
+    console.table(results);
+
+  start();
+  })
+}
+
+function viewDepartments() {
+  connection.query("SELECT * FROM department", function(err, results) {
+    if (err) throw err;
+    console.table(results);
+
+  start();
+  })
+}
+
+function viewRoles() {
   connection.query("SELECT * FROM job_duty", function(err, results) {
     if (err) throw err;
     console.table(results);
-    
-  // Code a whole bunch of functions to view the data in the table
 
-  //prompt of who to view
   start();
+  })
+}
 
+function viewJoinEmployeeRoles() {
+  connection.query("SELECT * FROM employee INNER JOIN job_duty on employee.employee_id = job_duty.job_duty_id", function(err, results) {
+    if (err) throw err;
+    console.table(results);
 
+  start();
+  })
+}
+
+function viewJoinDepartments() {
+  connection.query("SELECT * FROM job_duty INNER JOIN department on  job_duty.job_duty_id = department.department_id", function(err, results) {
+    if (err) throw err;
+    console.table(results);
+
+  start();
   })
 }
 // will need to combine first_name and last_name of the employees to full name inside the query call, then figure out what to update
 
 // function to update employee roles
 function updateEmployee () {
+    //view function to see inner join employee and job_duty
 
    
-   // inquirer.prompt to add in all the updates
+   // inquirer.prompt to update title and role
     inquirer.prompt([{
       name: "title",
       type: "input",
       message: "Please type in [title] of role:",
-          // query to bring up the person's full name
-          // user will need access to both employee and the role they are attached to thus require an inner join and a list presented to update that data,
-
     },
     {
       name: "job_duty_id",
@@ -94,8 +148,8 @@ function updateEmployee () {
     },
   
   ]) 
-  .then((answers) => {
-    connection.query("UPDATE employee INNER JOIN job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { title: answer.title, job_duty_id: answer.job_duty_id, }, 
+  .then((answer) => {
+    connection.query("UPDATE job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { title: answer.title, job_duty_id: answer.job_duty_id, }, 
     function(err, res) {
       if (err) throw err;
       
@@ -105,30 +159,33 @@ function updateEmployee () {
       
       start();
 
-    })
-    // error statement
-
-  }
-    // then else if statement to trigger update role or department
+      })
+    }
   )}
 
-  // update role query database to update person's role
+// functions to add data to the table 
+insertData = () => {
+  inquirer.prompt([
+    {
+      name: "insert",
+      type: "list",
+      message: "Which TABLE would you like to insert new data into?",
+      choices: ["DEPARTMENT", "ROLE", "EMPLOYEE"],
+    },
+  ])
+  .then((answer) => {
+    if (answer.insert === "DEPARTMENT")
+        {addDepartment();}
+            
+    else if (answer.insert === "ROLE")
+        {addToRole();}
+            
+    else if(answer.insert === "EMPLOYEE")
+        {addEmployee();}
+  })
+}
 
-  // update department query database to update department
-    
-  
-   // log updates
-
-  // if possible log updates returned to the console
-
-
-  // database prompts
-
-// department table prompt
-
-// function to add data to the table 
-// addToDEpartment
-function addEmployeeToDepartment () {
+function addDepartment () {
   inquirer
   .prompt([
     {
@@ -141,14 +198,17 @@ function addEmployeeToDepartment () {
       {
         name: answer.department
         },        
-        function(err) {
+        function(err, res) {
         if (err) throw err;
-        console.log("Your department was added successfully!");
-        addToRole();
+        console.table(res);
+        console.log(`[DEPARTMENT]: ${answer.department} Successfully Added!`);
+        
         }
       )
-
-    }))
+      start();
+    })
+    
+    )
 }
 
 //addToEmployee
@@ -178,17 +238,18 @@ function addToRole() {
     salary: answers.salary,
     job_duty_id: answers.job_duty_id,
   }, 
-  function(err) {
+  function(err,res) {
     if (err) throw err;
-    console.log("Salary and Title added successfully!");
-    employeeName();
+    console.table(res);
+    console.log(`Salary: ${answer.salary} and Title: ${answer.title} inserted successfully!`);
+    
   }
   )
-
+  start();
 })
 }
-
-function employeeName () {
+// Adding employee
+function addEmployee () {
   inquirer.prompt([
     {
       name: "first",
@@ -210,16 +271,18 @@ function employeeName () {
   .then((answers) => {
     connection.query("INSERT INTO employee SET ?", 
     {
-      first_name: answers.first_name,
-      last_name: answers.last_name,
+      first_name: answers.first,
+      last_name: answers.last,
       job_duty_id: answers.job_duty_id
     }, 
-    function(err) {
+    function(err, res) {
       if (err) throw err;
-      start();
+      console.table(res);
+      console.log(`[FIRST_NAME]: ${answers.first} and LAST_NAME: ${answers.last} inserted successfully!`);
+      
     }
     )
-    
+    start();
   })
 
 }

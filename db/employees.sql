@@ -23,7 +23,6 @@ CREATE TABLE employee (
   employee_id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
-  employeeNumber INT NOT NULL,
   job_duty_id   INT NOT NULL,
   PRIMARY KEY (employee_id),
   FOREIGN KEY (job_duty_id) REFERENCES job_duty(job_duty_id)
@@ -31,10 +30,11 @@ CREATE TABLE employee (
  USE employee_management;
  INSERT INTO department (name_of_department) values ("Human Resources");
  INSERT INTO job_duty (title, salary, department_id) values ("Human Resources Manager", 250000, 1);
- INSERT INTO employee (first_name, last_name, employeeNumber, job_duty_id) values ("Karen", "Schneider", 0001, 1);
+ INSERT INTO employee (first_name, last_name, job_duty_id) values ("Karen", "Schneider", 1);
  
 SELECT * FROM employee INNER JOIN job_duty on employee.employee_id = job_duty.job_duty_id; 
 UPDATE employee INNER JOIN job_duty SET title = "CEO" WHERE job_duty.job_duty_id = 1; 
+SELECT * FROM job_duty INNER JOIN department on  job_duty.job_duty_id = department.department_id;
 
 
 
