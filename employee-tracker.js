@@ -80,23 +80,27 @@ function updateEmployee () {
    
    // inquirer.prompt to add in all the updates
     inquirer.prompt([{
-      name: "first_name",
+      name: "title",
       type: "input",
-      message: "Please type in Employee's First Name:",
+      message: "Please type in [title] of role:",
           // query to bring up the person's full name
           // user will need access to both employee and the role they are attached to thus require an inner join and a list presented to update that data,
 
     },
     {
-      name: "last_name",
-      type: "input",
-      message: "Please type in Employee's Last Name:",
+      name: "job_duty_id",
+      type: "Number",
+      message: "Please type the [job_duty_id] of the job role (MUST BE A NUMERICAL VALUE):",
     },
   
   ]) 
   .then((answers) => {
-    connection.query("UPDATE employee INNER JOIN job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { first_name: answer.last_name }, function(err, res) {
-      console.log(answers);
+    connection.query("UPDATE employee INNER JOIN job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { title: answer.title, job_duty_id: answer.job_duty_id, }, 
+    function(err, res) {
+      if (err) throw err;
+      
+      console.log("Succesfully Updated!");
+      console.table(res);
       //Need to bring up different elements of the name
       
       start();
