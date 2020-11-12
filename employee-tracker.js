@@ -149,7 +149,13 @@ function updateEmployee () {
   
   ]) 
   .then((answer) => {
-    connection.query("UPDATE job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { title: answer.title, job_duty_id: answer.job_duty_id, }, 
+    connection.query("UPDATE job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", 
+    { 
+      title: answer.title, 
+      job_duty_id: answer.job_duty_id, 
+      // figure this out tomorrow but mostly works except for the update statement!!
+      job_duty
+    }, 
     function(err, res) {
       if (err) throw err;
       
@@ -196,19 +202,21 @@ function addDepartment () {
     .then((answer => {
       connection.query("INSERT INTO department SET ?", 
       {
-        name: answer.department
-        },        
+        name_of_department: answer.department
+      },        
         function(err, res) {
         if (err) throw err;
         console.table(res);
         console.log(`[DEPARTMENT]: ${answer.department} Successfully Added!`);
+        start();
         
         }
       )
-      start();
+      
     })
     
     )
+    
 }
 
 //addToEmployee
@@ -227,7 +235,7 @@ function addToRole() {
     message:"What is the salary of this employee (Please enter a numerical value)?"
   }, 
   {
-    name: "job_duty_id",
+    name: "department_id",
     type: "number",
     message: "Please enter the Department ID that this company will be in:"
   }
@@ -236,17 +244,18 @@ function addToRole() {
   {
     title: answers.title,
     salary: answers.salary,
-    job_duty_id: answers.job_duty_id,
+    department_id: answers.department_id,
   }, 
   function(err,res) {
     if (err) throw err;
     console.table(res);
-    console.log(`Salary: ${answer.salary} and Title: ${answer.title} inserted successfully!`);
-    
+    console.log(`Salary: ${answers.salary} and Title: ${answers.title} inserted successfully!`);
+    start();
   }
   )
-  start();
+  
 })
+
 }
 // Adding employee
 function addEmployee () {
@@ -279,10 +288,10 @@ function addEmployee () {
       if (err) throw err;
       console.table(res);
       console.log(`[FIRST_NAME]: ${answers.first} and LAST_NAME: ${answers.last} inserted successfully!`);
-      
+      start();
     }
     )
-    start();
+    
   })
-
+ 
 }
