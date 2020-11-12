@@ -71,26 +71,40 @@ function viewEmployees() {
   })
 }
 // will need to combine first_name and last_name of the employees to full name inside the query call, then figure out what to update
+
 // function to update employee roles
 function updateEmployee () {
-  connection.query("SELECT * FROM employee", function(err, results) { 
-    if (err) throw err;
+
+   
    // inquirer.prompt to add in all the updates
     inquirer.prompt([{
-      name: "updateSelector",
-      type: "list",
-      message: "Please Select an Employee to update:",
-      choices: function() {
-        let choiceArray = [];
-        for (var i = 0; i < results.length; i++) {
-          choiceArray.push(results[i].first_name);
-        }
-        return choiceArray;
-      },
+      name: "first_name",
+      type: "input",
+      message: "Please type in Employee's First Name:",
+          // query to bring up the person's full name
+          // user will need access to both employee and the role they are attached to thus require an inner join and a list presented to update that data,
 
-    }]) 
+    },
+    {
+      name: "last_name",
+      type: "input",
+      message: "Please type in Employee's Last Name:",
+    },
+  
+  ]) 
+  .then((answers) => {
+    connection.query("SELECT * FROM top5000 WHERE ?", { first_name: answer.song }, function(err, res) {
+      console.log(answers);
+      //Need to bring up different elements of the name
+      
+      start();
+
+    })
+    // error statement
+
+  }
     // then else if statement to trigger update role or department
-  })
+}
 
   // update role query database to update person's role
 
@@ -101,10 +115,8 @@ function updateEmployee () {
 
   // if possible log updates returned to the console
 
-}
 
-
-// database prompts
+  // database prompts
 
 // department table prompt
 
