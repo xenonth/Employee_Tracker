@@ -88,8 +88,13 @@ function updateEmployee () {
         return choiceArray;
       },
 
-    }])
+    }]) 
+    // then else if statement to trigger update role or department
   })
+
+  // update role query database to update person's role
+
+  // update department query database to update department
     
   
    // log updates
@@ -114,7 +119,8 @@ function addEmployeeToDepartment () {
       message: "Name of the Department?"
     }])
     .then((answer => {
-      connection.query("INSERT INTO department SET ?", {
+      connection.query("INSERT INTO department SET ?", 
+      {
         name: answer.department
         },        
         function(err) {
@@ -129,7 +135,9 @@ function addEmployeeToDepartment () {
 
 //addToEmployee
 function addToRole() {
+  //inquirer prompt for department set
   inquirer.prompt([
+
     {
       name: "title",
       type: "input",
@@ -139,12 +147,18 @@ function addToRole() {
     name: "salary",
     type: "number",
     message:"What is the salary of this employee (Please enter a numerical value)?"
+  }, 
+  {
+    name: "job_duty_id",
+    type: "number",
+    message: "Please enter the Department ID that this company will be in:"
   }
 ]).then((answers) => {
   connection.query("INSERT INTO job_duty SET ?", 
   {
     title: answers.title,
-    salary: answers.salary
+    salary: answers.salary,
+    job_duty_id: answers.job_duty_id,
   }, 
   function(err) {
     if (err) throw err;
@@ -169,12 +183,18 @@ function employeeName () {
     type: "input",
     message: "What is this employee's last name?"
     },
+    {
+      name: "job_duty_id",
+      type: "number",
+      message: "What is the Job_Duty_ID value for this role (MUST BE A NUMERICAL VALUE)?"
+    }
   ])
   .then((answers) => {
     connection.query("INSERT INTO employee SET ?", 
     {
       first_name: answers.first_name,
-      salary: answers.last_name
+      last_name: answers.last_name,
+      job_duty_id: answers.job_duty_id
     }, 
     function(err) {
       if (err) throw err;
