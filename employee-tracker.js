@@ -42,7 +42,7 @@ function start() {
       if (answer.access === "ADD") {
         addEmployeeToDepartment();
       }
-      else if(answer.view === "VIEW") {
+      else if(answer.access === "VIEW") {
        viewEmployees();
       
       } else if (answer.access === "UPDATE"){
@@ -57,15 +57,17 @@ function start() {
 }
 
 // function to view data in the table
+
 function viewEmployees() {
   // QUERY DATABASE for employee data
   connection.query("SELECT * FROM job_duty", function(err, results) {
     if (err) throw err;
-    let view = table.getTable(results);
-    console.log(view);
+    console.table(results);
+    
+  // Code a whole bunch of functions to view the data in the table
 
   //prompt of who to view
-
+  start();
 
 
   })
@@ -93,7 +95,7 @@ function updateEmployee () {
   
   ]) 
   .then((answers) => {
-    connection.query("SELECT * FROM top5000 WHERE ?", { first_name: answer.song }, function(err, res) {
+    connection.query("UPDATE employee INNER JOIN job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", { first_name: answer.last_name }, function(err, res) {
       console.log(answers);
       //Need to bring up different elements of the name
       
@@ -104,7 +106,7 @@ function updateEmployee () {
 
   }
     // then else if statement to trigger update role or department
-}
+  )}
 
   // update role query database to update person's role
 

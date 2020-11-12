@@ -6,35 +6,35 @@ USE employee_management;
 
 
 CREATE TABLE department (
-    id INT NOT NULL AUTO_INCREMENT,
+    department_id INT NOT NULL AUTO_INCREMENT,
     name_of_department VARCHAR(50) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (department_id)
 );
 CREATE TABLE job_duty (
-      id INT NOT NULL AUTO_INCREMENT,
+      job_duty_id INT NOT NULL AUTO_INCREMENT,
       title VARCHAR(50) NOT NULL,
       salary decimal(10,2) NOT NULL,
       department_id INT NOT NULL,
-      PRIMARY KEY (id),
-      FOREIGN KEY (department_id) references department (id)
+      PRIMARY KEY (job_duty_id),
+      FOREIGN KEY (department_id) references department (department_id)
 );
 
 CREATE TABLE employee (
-  id INT NOT NULL AUTO_INCREMENT,
+  employee_id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(45) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   employeeNumber INT NOT NULL,
   job_duty_id   INT NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (job_duty_id) REFERENCES job_duty(id)
+  PRIMARY KEY (employee_id),
+  FOREIGN KEY (job_duty_id) REFERENCES job_duty(job_duty_id)
 );
  USE employee_management;
  INSERT INTO department (name_of_department) values ("Human Resources");
  INSERT INTO job_duty (title, salary, department_id) values ("Human Resources Manager", 250000, 1);
  INSERT INTO employee (first_name, last_name, employeeNumber, job_duty_id) values ("Karen", "Schneider", 0001, 1);
  
-SELECT * FROM employee INNER JOIN job_duty; 
-UPDATE employee INNER JOIN job_duty SET title = "CEO" WHERE  job_duty_id = 1; 
+SELECT * FROM employee INNER JOIN job_duty on employee.employee_id = job_duty.job_duty_id; 
+UPDATE employee INNER JOIN job_duty SET title = "CEO" WHERE job_duty.job_duty_id = 1; 
 
 
 
