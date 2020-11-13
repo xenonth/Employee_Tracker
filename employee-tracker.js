@@ -156,9 +156,8 @@ function updateEmployee () {
 
     function(err, res) {
       if (err) throw err;
-      
-      console.log("EMPLOYEE successfully updated!");
       console.table(res);
+      console.log("EMPLOYEE successfully updated!");
       //Need to bring up different elements of the name
       
       start();
