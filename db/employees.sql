@@ -32,10 +32,13 @@ CREATE TABLE employee (
  INSERT INTO job_duty (title, salary, department_id) values ("Human Resources Manager", 250000, 1);
  INSERT INTO employee (first_name, last_name, job_duty_id) values ("Karen", "Schneider", 1);
  
-SELECT * FROM employee INNER JOIN job_duty on employee.employee_id = job_duty.job_duty_id; 
+SELECT * FROM employee INNER JOIN job_duty on employee.job_duty_id = job_duty.job_duty_id; 
 UPDATE employee INNER JOIN job_duty SET title = "CEO" WHERE job_duty.job_duty_id = 1; 
 SELECT * FROM job_duty INNER JOIN department on  job_duty.job_duty_id = department.department_id;
 
 SELECT * FROM DEPARTMENT
+VIEW * FROM employee; 
+UPDATE employee SET employee.job_duty_id = 2 WHERE employee.employee_id = 2;
+
 
 

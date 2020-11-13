@@ -137,29 +137,27 @@ function updateEmployee () {
    
    // inquirer.prompt to update title and role
     inquirer.prompt([{
-      name: "title",
-      type: "input",
-      message: "Please type in [title] of role:",
+      name: "employee_id",
+      type: "number",
+      message: "Please enter [ID] of employee:",
     },
     {
       name: "job_duty_id",
-      type: "Number",
-      message: "Please type the [job_duty_id] of the job role (MUST BE A NUMERICAL VALUE):",
-    },
-  
+      type: "number",
+      message: "Please enter [ID] of role:"
+    }, 
   ]) 
   .then((answer) => {
-    connection.query("UPDATE job_duty SET title = ? WHERE job_duty.job_duty_id = ?; ", 
-    { 
-      title: answer.title, 
-      job_duty_id: answer.job_duty_id, 
-      // figure this out tomorrow but mostly works except for the update statement!!
-      job_duty
-    }, 
+    connection.query("UPDATE employee SET employee.job_duty_id = ? WHERE employee.employee_id = ?", 
+    [ 
+      answer.job_duty_id, 
+     answer.employee_id,
+    ],
+
     function(err, res) {
       if (err) throw err;
       
-      console.log("Succesfully Updated!");
+      console.log("EMPLOYEE successfully updated!");
       console.table(res);
       //Need to bring up different elements of the name
       
